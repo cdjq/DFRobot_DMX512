@@ -1,0 +1,89 @@
+#######################################
+# Syntax Coloring Map For DFRobot_Sensor
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DFRobot_DMX512	KEYWORD1
+DFRobot_ADC	KEYWORD1
+DFRobot_DAC	KEYWORD1
+DFRobot_RTC	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+ledON	KEYWORD2
+ledOFF	KEYWORD2
+ledWate	KEYWORD2
+ledRespire	KEYWORD2
+ledSpectrum	KEYWORD2
+ledTwinkle	KEYWORD2
+rgbColor	KEYWORD2
+rgbOff	KEYWORD2
+rgbRainbow	KEYWORD2
+rgbRespire	KEYWORD2
+rgbJump	KEYWORD2
+rgbGradual	KEYWORD2
+rgbSpectrum	KEYWORD2
+setDACOutRange	KEYWORD2
+setDACOutVoltage	KEYWORD2
+startClock	KEYWORD2
+stopClock	KEYWORD2
+setYear	KEYWORD2
+setMonth	KEYWORD2
+setDay	KEYWORD2
+setWeekDay	KEYWORD2
+setHour	KEYWORD2
+setMinut	KEYWORD2
+setSecond	KEYWORD2
+getTime	KEYWORD2
+getADCData	KEYWORD2
+
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+eRed	LITERAL1
+eGreen	LITERAL1
+eBlue	LITERAL1
+eOutPutRange5V	LITERAL1
+eOutPutRange10V	LITERAL1
+eChannel1	LITERAL1
+eChannel2	LITERAL1
+eChannelAll	LITERAL1
+year	LITERAL1
+month	LITERAL1
+weekday	LITERAL1
+hour	LITERAL1
+minute	LITERAL1
+second	LITERAL1
+eSunDay	LITERAL1
+eMonDay	LITERAL1
+eTuesDay	LITERAL1
+eWednesDay	LITERAL1
+eThursDay	LITERAL1
+eFriDay	LITERAL1
+eSaturDay	LITERAL1
+eJanuary	LITERAL1
+eFebruary	LITERAL1
+eMarch	LITERAL1
+eApril	LITERAL1
+eMay	LITERAL1
+eJune	LITERAL1
+eJuly	LITERAL1
+eAugust	LITERAL1
+eSeptember	LITERAL1
+eOctober	LITERAL1
+eNovember	LITERAL1
+eDecember	LITERAL1
+
