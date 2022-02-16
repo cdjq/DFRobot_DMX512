@@ -5,12 +5,12 @@
 使用方便，功能强大。
 
 
-![产品效果图片](./resources/images/SEN0xxx.png)
+![产品效果图片](./resources/images/DFR0944.png)
 
 
 ## 产品链接（https://www.dfrobot.com.cn/）
 
-    SKU：SEN0xxx
+    SKU：DFR0944
 
 ## 目录
 
