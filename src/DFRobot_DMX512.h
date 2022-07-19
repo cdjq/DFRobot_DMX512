@@ -13,8 +13,6 @@
 
 #include "Arduino.h"
 #include "String.h"
-#include "driver/uart.h"
-#include "esp32-hal-uart.h"
 #include "math.h"
 
 
@@ -24,9 +22,9 @@
 #define DBG(...)
 #endif
 
-#define DMX512_RX  7
-#define DMX512_TX  5
-#define DMX512_DE  6
+#define DMX512_RX  9
+#define DMX512_TX  8
+#define DMX512_DE  10
 #define DMX512_UART  1
 
 #define DMX512_LENGTH_ERROR 1

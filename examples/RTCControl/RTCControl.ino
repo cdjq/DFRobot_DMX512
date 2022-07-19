@@ -47,6 +47,7 @@ void loop(){
   Serial.println(time.minute);
   Serial.print("second:");
   Serial.println(time.second);
-  delay(1000);
+   Serial.println("--------------------------------------------------------");
+  delay(100);
 }
   

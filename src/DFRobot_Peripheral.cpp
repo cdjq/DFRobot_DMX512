@@ -28,7 +28,9 @@ uint8_t DFRobot_Peripheral::begin(uint8_t addr,uint8_t reg)
 
 uint8_t DFRobot_DAC::begin(void)
 {
-  _pWire->begin(PERIPHERALSDAPIN,PERIPHERALSCLPIN);   
+  _pWire->setSDA(PERIPHERALSDAPIN);
+  _pWire->setSCL(PERIPHERALSCLPIN);
+  _pWire->begin(); 
   return DFRobot_Peripheral::begin(_address,0x01);
 }
 
@@ -36,10 +38,11 @@ void DFRobot_DAC::setDACOutRange(eOutPutRange range)
 {
   if(range == eOutPutRange::eOutPutRange5V){
     calculatingData = 819;
+    writeReg(_address,0x00,&range,1);
   }else{
     calculatingData = 409;
+    writeReg(_address,0x01,&range,1);
   }
-  writeReg(_address,0x01,&range,1);
 }
 
 void DFRobot_DAC::setDACOutVoltage(eChannel channel, float data)
@@ -105,7 +108,9 @@ DFRobot_RTC::DFRobot_RTC(TwoWire *pWire, uint8_t address)
 
 uint8_t DFRobot_RTC::begin(void)
 { 
-  _pWire->begin(PERIPHERALSDAPIN,PERIPHERALSCLPIN);   
+  _pWire->setSDA(PERIPHERALSDAPIN);
+  _pWire->setSCL(PERIPHERALSCLPIN);
+  _pWire->begin();   
   return DFRobot_Peripheral::begin(_address, 0x09);
 }
 
@@ -202,30 +207,5 @@ uint8_t DFRobot_RTC::bcdToNumber(uint8_t first, uint8_t second)
   output = first * 10;
   output = output + second;
   return output;
-}
-
-DFRobot_ADC::DFRobot_ADC(TwoWire *pWire, uint8_t address)
-{
-  _pWire = pWire;
-  _address = address;
-}
-
-uint8_t DFRobot_ADC::begin(void)
-{
-  _pWire->begin(PERIPHERALSDAPIN,PERIPHERALSCLPIN);   
-  return DFRobot_Peripheral::begin(_address, 0x08);
-}
-uint16_t DFRobot_ADC::getADCData(eChannel channel)
-{
-  uint16_t data = 0;
-  uint8_t buf[2];
-  if(channel == eChannel::eChannel1){
-    readReg(_address, 0x08, buf, 2);
-    data = buf[0] << 8 | buf[1];
-  }else if(channel = eChannel::eChannel2){
-    readReg(_address, 0x0a, buf, 2);
-    data = buf[0] << 8 | buf[1];
-  }
-  return data;
 }
 

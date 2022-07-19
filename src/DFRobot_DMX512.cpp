@@ -1,24 +1,15 @@
 #include "DFRobot_DMX512.h"
 
+//extern uart_inst_t * const uart1;
 void DFRobot_DMX512::begin(void)
 {   
   pinMode(DMX512_DE, OUTPUT);
   digitalWrite(DMX512_DE, HIGH);
-  if (uart_is_driver_installed(DMX512_UART)) {
-    uart_driver_delete(DMX512_UART);
-  }
-  uart_config_t uart_config = {
-    .baud_rate = 250000,
-    .data_bits = UART_DATA_8_BITS,
-    .parity    = UART_PARITY_DISABLE,
-    .stop_bits = UART_STOP_BITS_2,
-    .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-    .source_clk = UART_SCLK_APB,
-  };
-  ESP_ERROR_CHECK(uart_driver_install(DMX512_UART, 1024, 0, 0, NULL, 0));
-  ESP_ERROR_CHECK(uart_param_config(DMX512_UART, &uart_config));
-  ESP_ERROR_CHECK(uart_set_pin(DMX512_UART, DMX512_TX, DMX512_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-  uart_wait_tx_done(DMX512_UART, 1000);
+  uart_init(uart1,250000);
+  uart_set_format(uart1,8,2,UART_PARITY_NONE);
+  gpio_set_function(DMX512_TX, GPIO_FUNC_UART);
+  gpio_set_function(DMX512_RX, GPIO_FUNC_UART);
+  uart_default_tx_wait_blocking();
 }
 
 uint8_t DFRobot_DMX512::ledON(uint16_t addr, uint8_t luminance, uint16_t chanelNum)
@@ -76,7 +67,6 @@ uint8_t DFRobot_DMX512::ledSpectrum(uint16_t addr, uint16_t chanelNum, uint8_t l
 uint8_t DFRobot_DMX512::ledTwinkle(uint16_t addr, uint16_t chanelNum, uint8_t luminance, uint8_t speed)
 {
   uint16_t time = 12750 / speed;
-  uint8_t i = 0;
   if((addr + chanelNum)>513){
     return DMX512_LENGTH_ERROR;
   }
@@ -179,14 +169,14 @@ uint8_t DFRobot_DMX512::rgbRespire(uint16_t addr, uint8_t lightswithNumber,eColo
 {
   uint16_t dataLength = lightswithNumber * 3;
   uint8_t buffer[dataLength];
-  uint8_t state =0,i = 0,k = 0,j = 0;
+  uint8_t state =0,k = 0,j = 0;
   uint16_t time = 1275 / speed;
   if((addr + (lightswithNumber*3))>513){
     return DMX512_LENGTH_ERROR;
   }
-  for(uint8_t i = 0;i < dataLength;i++)
+  for(uint8_t i = 0;i < dataLength;i++){
     buffer[i] = 0;
-    for(; k < light; k++){
+    for(k = 0; k < light; k++){
       for(;j < lightswithNumber;j++){
         buffer[colour+j+state] = k;
         state += 2;
@@ -196,7 +186,7 @@ uint8_t DFRobot_DMX512::rgbRespire(uint16_t addr, uint8_t lightswithNumber,eColo
       delay(time);
       writeBuf(addr, &buffer, dataLength);
     }
-    for(;k > 0; --k){
+    for(k = 0;k > 0; --k){
       for(;j < lightswithNumber;j++){
         buffer[colour+j+state] = k-1;
         state += 2;
@@ -206,6 +196,8 @@ uint8_t DFRobot_DMX512::rgbRespire(uint16_t addr, uint8_t lightswithNumber,eColo
       delay(time);
       writeBuf(addr, &buffer, dataLength);
     }
+  }
+    
   return DMX512_OK;
 }
 
@@ -213,7 +205,7 @@ uint8_t DFRobot_DMX512::rgbJump(uint16_t addr, uint8_t lightswithNumber,uint8_t 
 {
   uint16_t dataLength = lightswithNumber * 3;
   uint8_t buffer[dataLength];
-  uint8_t state =0,i = 0,k = 0,j = 0;
+  uint8_t state =0,i = 0,j = 0;
   uint16_t time = 12750 / speed;
   if((addr + (lightswithNumber*3))>513){
     return DMX512_LENGTH_ERROR;
@@ -325,36 +317,30 @@ uint8_t DFRobot_DMX512::rgbSpectrum(uint16_t addr, uint8_t lightswithNumber,uint
 void DFRobot_DMX512::writeData(uint16_t addr, uint8_t luminance, size_t len)
 {
   //DBG(addr);
-  uart_wait_tx_done(DMX512_UART, 500);
-  uart_set_line_inverse(DMX512_UART, 38);
-  ets_delay_us(88);
-  uart_set_line_inverse(DMX512_UART, 0);
-  ets_delay_us(8);
-  for(uint16_t i=0; i < len; i++){
+  uart_default_tx_wait_blocking();
+  uart_set_break(uart1,true);
+  busy_wait_us_32(88);
+  uart_set_break(uart1,false);
+  busy_wait_us_32(8);
+   for(uint16_t i=0; i < len; i++){
     _dataBuf[addr + i] = luminance;
   }
-  for(uint16_t i =0;i < 513;i++){
-    uart_write_bytes(DMX512_UART, &_dataBuf[i], 1);
-    ets_delay_us(10);
-  }
+  uart_write_blocking(uart1,_dataBuf,512);
 }
 
 void DFRobot_DMX512::writeBuf(uint16_t addr, void *buf, size_t len)
 {
   //DBG(addr);
   uint8_t *_pbuf = (uint8_t*)buf;
-  uart_wait_tx_done(DMX512_UART, 500);
-  uart_set_line_inverse(DMX512_UART, 38);
-  ets_delay_us(88);
-  uart_set_line_inverse(DMX512_UART, 0);
-  ets_delay_us(8);
-  for(uint16_t i=0; i < len; i++){
-    _dataBuf[addr + i] = _pbuf[i];
+  uart_default_tx_wait_blocking();
+  uart_set_break(uart1,true);
+  busy_wait_us_32(88);
+  uart_set_break(uart1,false);
+  busy_wait_us_32(8);
+   for(uint16_t i=0; i < len; i++){
+    _dataBuf[addr + i] =_pbuf[i];
   }
-  for(uint16_t i =0;i < 513;i++){
-    uart_write_bytes(DMX512_UART, &_dataBuf[i], 1);
-    ets_delay_us(10);
-  }
+    uart_write_blocking(uart1,_dataBuf,512);
 }
 
 

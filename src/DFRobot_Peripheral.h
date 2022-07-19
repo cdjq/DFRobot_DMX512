@@ -22,8 +22,8 @@
 #define DBG(...)
 #endif
 
-#define PERIPHERALSCLPIN 36
-#define PERIPHERALSDAPIN 35
+#define PERIPHERALSCLPIN 19
+#define PERIPHERALSDAPIN 18
 
 class DFRobot_Peripheral
 {
@@ -83,7 +83,7 @@ public:
 		eChannelAll,
   }eChannel;
 
-  DFRobot_DAC(TwoWire *pWire = &Wire,uint8_t adaddressdr = 0X58);
+  DFRobot_DAC(TwoWire *pWire = &Wire1,uint8_t adaddressdr = 0X58);
 	/**
    * @fn begin
    * @brief 初始化外设传感器
@@ -179,7 +179,7 @@ public:
 
 
 
-  DFRobot_RTC(TwoWire *pWire = &Wire,uint8_t adaddressdr = 0X51);
+  DFRobot_RTC(TwoWire *pWire = &Wire1,uint8_t adaddressdr = 0X51);
   /**
    * @fn begin
    * @brief 初始化外设传感器
@@ -268,37 +268,6 @@ private:
   uint8_t getSecondNumber(uint8_t number);
   uint8_t getFirstNumber(uint8_t number);
   uint8_t bcdToNumber(uint8_t first, uint8_t second);
-  uint8_t _address;
-};
-
-class DFRobot_ADC:public DFRobot_Peripheral
-{
-public:
-  /**
-	 * @fn eChannel
-	 * @brief ADC通道选择
-	 */
-	typedef enum{
-    eChannel1 = 0x08,
-    eChannel2 = 0x0A,
-  }eChannel;
-
-  DFRobot_ADC(TwoWire *pWire = &Wire,uint8_t adaddressdr = 0X0A);
-
-  /**
-   * @fn begin
-   * @brief 初始化外设传感器
-   * @return 返回初始化状态
-   */
-  uint8_t begin(void);
-  /**
-   *@fn  getADCData
-   * @brief 获取ADC数据
-   * @param channel ADC通道选择
-   * @return 返回ADC采集的原始数据
-   */ 
-  uint16_t getADCData(eChannel channel);
-private:
   uint8_t _address;
 };
 #endif

@@ -5,12 +5,12 @@
 使用方便，功能强大。
 
 
-![产品效果图片](./resources/images/DFR0944.png)
+![产品效果图片](./resources/images/SEN0xxx.png)
 
 
 ## 产品链接（https://www.dfrobot.com.cn/）
 
-    SKU：DFR0944
+    SKU：SEN0xxx
 
 ## 目录
 
@@ -317,23 +317,6 @@
   sTime_t getTime(void)
 ```
 
-## 方法 DFRobot_ADC
-
-```C++
-  /**
-   * @fn begin
-   * @brief 初始化外设传感器
-   * @return 返回初始化状态
-   */
-  uint8_t begin(void)
-  /**
-   *@fn  getADCData
-   * @brief 获取ADC数据
-   * @param channel ADC通道选择
-   * @return 返回ADC采集的原始数据
-   */
-  uint16_t getADCData(eChannel channel) 
-  ```
 
 
 ## 兼容性
